@@ -112,7 +112,7 @@ public:
   void UpdateRadar(MeasurementPackage meas_package);
   
   /**
-   * Steps shared by both UpdateLidar and UpdateRadar
+   * UKF's shared steps
    * 
    */
   void UpdateUKF(MeasurementPackage meas_package, MatrixXd Zsig, int n_z);

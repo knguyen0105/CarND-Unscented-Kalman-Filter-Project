@@ -164,8 +164,8 @@ void UKF::Prediction(double delta_t) {
   for (int i = 0; i< n_sig_; i++)
   {
 
-    double p_x      = Xsig_aug(0,i);
-    double p_y      = Xsig_aug(1,i);
+    double px      = Xsig_aug(0,i);
+    double py      = Xsig_aug(1,i);
     double v        = Xsig_aug(2,i);
     double yaw      = Xsig_aug(3,i);
     double yawd     = Xsig_aug(4,i);
@@ -181,13 +181,13 @@ void UKF::Prediction(double delta_t) {
     // Avoid division by zero
     if (fabs(yawd) > EPS) {	
       	double v_yawd     = v/yawd;
-        px_p              = p_x + v_yawd * (sin(arg) - sin_yaw);
-        py_p              = p_y + v_yawd * (cos_yaw - cos(arg) );
+        px_p              = px + v_yawd * (sin(arg) - sin_yaw);
+        py_p              = py + v_yawd * (cos_yaw - cos(arg) );
     }
     else {
 	      double v_delta_t = v*delta_t;
-        px_p             = p_x + v_delta_t*cos_yaw;
-        py_p             = p_y + v_delta_t*sin_yaw;
+        px_p             = px + v_delta_t*cos_yaw;
+        py_p             = py + v_delta_t*sin_yaw;
     }
     double v_p    = v;
     double yaw_p  = arg;
@@ -231,17 +231,17 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   // Sigma points in measurement space
   for (int i = 0; i < n_sig_; i++) {
 
-    double p_x = Xsig_pred_(0,i);
-    double p_y = Xsig_pred_(1,i);
+    double px = Xsig_pred_(0,i);
+    double py = Xsig_pred_(1,i);
     double v   = Xsig_pred_(2,i);
     double yaw = Xsig_pred_(3,i);
     double v1  = cos(yaw)*v;
     double v2  = sin(yaw)*v;
 
 
-    Zsig(0,i) = sqrt(p_x*p_x + p_y*p_y);          
-    Zsig(1,i) = atan2(p_y,p_x);                   
-    Zsig(2,i) = (p_x*v1 + p_y*v2 ) / Zsig(0,i);   
+    Zsig(0,i) = sqrt(pow(px,2) + pow(py,2));          
+    Zsig(1,i) = atan2(py,px);                   
+    Zsig(2,i) = (px*v1 + py*v2 ) / Zsig(0,i);   
   }
 
   // Shared steps between Radar and Laser
